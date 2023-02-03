@@ -6,8 +6,8 @@ import (
 
 type Account struct{
 	gorm.Model
-	Id int `json:"id" gorm:"primary_key"`
+	Id int64 `json:"id" gorm:"primary_key"`
 	Owner string `json:"owner"`
-	Balance int `json:"balance"`
+	Balance int64 `json:"balance"`
 	Currency string `json:"currency"`
 }
