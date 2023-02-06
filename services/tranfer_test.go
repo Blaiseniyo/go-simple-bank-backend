@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Blaiseniyo/go-simple-bank-backend/models"
-	// "github.com/Blaiseniyo/go-simple-bank-backend/util"
 	"github.com/stretchr/testify/require"
 )
 
