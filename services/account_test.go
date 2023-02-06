@@ -9,7 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func createAccount(t *testing.T) models.Account{
+
+func CreateAccounts(t *testing.T) models.Account{
 	arg := models.Account{
 		Owner: util.RandomOwner(),
 		Balance: util.RandomMoney(),
@@ -33,12 +34,12 @@ func createAccount(t *testing.T) models.Account{
 }
 
 func TestCreateAccount(t *testing.T){
-	createAccount(t)
+	CreateAccounts(t)
 }
 
 func TestGetAccount(t *testing.T){
 	account :=models.Account{}
-	new_account :=createAccount(t)
+	new_account :=CreateAccounts(t)
 	_,err := GetAccountById(context.Background(),&account,new_account.Id,TEST_DB)
 
 	require.NoError(t,err)
@@ -54,7 +55,7 @@ func TestGetAccount(t *testing.T){
 
 func TestUpdateAccount(t *testing.T){
 	update_account :=models.Account{Owner: "test_User",Balance: 12323,Currency: "FRW"}
-	account :=createAccount(t)
+	account :=CreateAccounts(t)
 	_,err := UpdateAccount(context.Background(),&account,&update_account,TEST_DB)
 
 	require.NoError(t,err)
@@ -69,7 +70,7 @@ func TestUpdateAccount(t *testing.T){
 
 func TestDeletAccount(t *testing.T){
 	
-	account :=createAccount(t)
+	account :=CreateAccounts(t)
 	deleted_row,err := DeleteAccount(context.Background(),account.Id,TEST_DB)
 
 	require.NoError(t,err)
@@ -81,7 +82,7 @@ func TestDeletAccount(t *testing.T){
 func TestListAllAccount(t *testing.T){
 	accounts := []models.Account{} 
 	for i := 0; i < 10; i++ {
-		createAccount(t)
+		CreateAccounts(t)
 	}
 
 	_,err := ListAllAccounts(context.Background(),&accounts,5,5,TEST_DB)
