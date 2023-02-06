@@ -2,8 +2,8 @@ package main
 
 import (
 	// "context"
-	"fmt"
-	"log"
+	// "fmt"
+	// "log"
 
 	"github.com/Blaiseniyo/go-simple-bank-backend/db"
 	"github.com/Blaiseniyo/go-simple-bank-backend/models"
@@ -34,11 +34,11 @@ func main() {
     } 
   c := &gin.Context{}
   services.CreateAccount(c,&account,DB)
-  accounts,err := services.ListAllAccounts(c,DB)
-  if err != nil{
-    log.Fatal("can not retries data from the database")
-  }
+  // accounts,err := services.ListAllAccounts(c,DB)
+  // if err != nil{
+  //   log.Fatal("can not retries data from the database")
+  // }
   // DB.Create(&account)
   // DB.Find(&accounts)
-  fmt.Println(accounts)
+  // fmt.Println(accounts)
 }

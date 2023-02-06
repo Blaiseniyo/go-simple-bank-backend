@@ -27,8 +27,8 @@ func DeleteAccount(ctx context.Context, accountId int64, DB *gorm.DB) (int64, er
 	return result.RowsAffected, result.Error
 }
 
-func ListAllAccounts(ctx context.Context, DB *gorm.DB) ([] models.Account,error){
-	accounts := []models.Account{} 
-	result := DB.Find(&accounts)
-	return accounts,result.Error
-}
+// func ListAllAccounts(ctx context.Context, DB *gorm.DB) ([] models.Account,error){
+// 	accounts := []models.Account{} 
+// 	result := DB.Find(&accounts)
+// 	return accounts,result.Error
+// }
