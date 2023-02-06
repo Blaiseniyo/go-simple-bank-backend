@@ -12,19 +12,18 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-//  RandomInt generates a rondom integer between min and max
-func RandomInt(min,max int64) int64{
+// RandomInt generates a rondom integer between min and max
+func RandomInt(min, max int64) int64 {
 	return min + rand.Int63n(max-min+1)
 }
 
-
 // RandomString generates a random string of length n
-func RandomString(n int) string{
+func RandomString(n int) string {
 	var sub strings.Builder
 
 	k := len(alphabet)
 
-	for i:=0;i < n; i++ {
+	for i := 0; i < n; i++ {
 		c := alphabet[rand.Intn(k)]
 		sub.WriteByte(c)
 	}
@@ -32,16 +31,15 @@ func RandomString(n int) string{
 	return sub.String()
 }
 
-
-func RandomOwner() string{
+func RandomOwner() string {
 	return RandomString(6)
 }
 
-func RandomMoney() int64{
-	return RandomInt(0,10000)
+func RandomMoney() int64 {
+	return RandomInt(0, 10000)
 }
 
-func RandomCurrency() string{
-	currencies := []string{"USD","FRW","EURO"}
+func RandomCurrency() string {
+	currencies := []string{"USD", "FRW", "EURO"}
 	return currencies[rand.Intn(len(currencies))]
 }
