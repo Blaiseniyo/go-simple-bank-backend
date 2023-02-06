@@ -78,6 +78,18 @@ func TestDeletAccount(t *testing.T){
 }
 
 
-// func TestListAllAccount(t *testing.T){
-// 	createAccount(t)
-// }
+func TestListAllAccount(t *testing.T){
+	accounts := []models.Account{} 
+	for i := 0; i < 10; i++ {
+		createAccount(t)
+	}
+
+	_,err := ListAllAccounts(context.Background(),&accounts,5,5,TEST_DB)
+
+	require.NoError(t,err)
+	require.Equal(t,len(accounts),5)
+
+	for _,i := range accounts{
+		require.NotEmpty(t,i)
+	}
+}
