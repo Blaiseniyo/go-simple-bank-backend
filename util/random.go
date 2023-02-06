@@ -14,7 +14,7 @@ func init() {
 
 //  RandomInt generates a rondom integer between min and max
 func RandomInt(min,max int64) int64{
-	return min + rand.Int63n(min-max+1)
+	return min + rand.Int63n(max-min+1)
 }
 
 
@@ -38,7 +38,7 @@ func RandomOwner() string{
 }
 
 func RandomMoney() int64{
-	return RandomInt(1,10000)
+	return RandomInt(0,10000)
 }
 
 func RandomCurrency() string{
