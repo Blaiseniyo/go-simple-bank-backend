@@ -7,19 +7,22 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateTransfer(ctx context.Context, Transfer *models.Transfer, DB *gorm.DB) (*models.Transfer, error) {
-	result := DB.Create(&Transfer)
-	return Transfer, result.Error
+func CreateTransfer(ctx context.Context, transfer *models.Transfer, DB *gorm.DB) (models.Transfer, error) {
+	var created_tranfer models.Transfer
+	result := DB.Create(&transfer).Scan(&created_tranfer)
+	return created_tranfer, result.Error
 }
 
-func GetTransferById(ctx context.Context, Transfer *models.Transfer, TransferId int64, DB *gorm.DB) (*models.Transfer, error) {
-	result := DB.First(&Transfer, TransferId)
-	return nil, result.Error
+func GetTransferById(ctx context.Context, TransferId int64, DB *gorm.DB) (models.Transfer, error) {
+	var transfer models.Transfer
+	result := DB.First(&transfer, TransferId)
+	return transfer, result.Error
 }
 
-func UpdateTransfer(ctx context.Context, Transfer *models.Transfer, UpdatedTransferData *models.Transfer, DB *gorm.DB) (*models.Transfer, error) {
-	result := DB.Model(&Transfer).Updates(&UpdatedTransferData)
-	return Transfer, result.Error
+func UpdateTransfer(ctx context.Context, transfer *models.Transfer, UpdatedTransferData *models.Transfer, DB *gorm.DB) ( models.Transfer, error) {
+	var updated_account models.Transfer
+	result := DB.Model(&transfer).Updates(&UpdatedTransferData).Scan(&updated_account)
+	return updated_account, result.Error
 }
 
 func DeleteTransfer(ctx context.Context, TransferId int64, DB *gorm.DB) (int64, error) {
@@ -27,7 +30,8 @@ func DeleteTransfer(ctx context.Context, TransferId int64, DB *gorm.DB) (int64, 
 	return result.RowsAffected, result.Error
 }
 
-func ListAllTransfers(ctx context.Context, Transfers *[]models.Transfer, limit int, offset int, DB *gorm.DB) (*[]models.Transfer, error) {
-	result := DB.Limit(limit).Offset(offset).Find(&Transfers)
-	return Transfers, result.Error
+func ListAllTransfers(ctx context.Context, limit int, offset int, DB *gorm.DB) ( []models.Transfer, error) {
+	var transfers []models.Transfer
+	result := DB.Limit(limit).Offset(offset).Find(&transfers)
+	return transfers, result.Error
 }

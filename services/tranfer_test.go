@@ -24,7 +24,7 @@ func createTransfer(t *testing.T) models.Transfer {
 
 	require.NotZero(t, transfer.CreatedAt)
 
-	return *transfer
+	return transfer
 }
 
 func TestCreateTransfer(t *testing.T) {
@@ -33,9 +33,8 @@ func TestCreateTransfer(t *testing.T) {
 
 func TestGetTransfer(t *testing.T) {
 
-	transfer := models.Transfer{}
 	new_transfer := createTransfer(t)
-	_, err := GetTransferById(context.Background(), &transfer, new_transfer.Id, TEST_DB)
+	transfer, err := GetTransferById(context.Background(), new_transfer.Id, TEST_DB)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, transfer)
@@ -53,14 +52,14 @@ func TestUpdateTransfer(t *testing.T) {
 
 	update_transfer := models.Transfer{Amount: 2}
 	transfer := createTransfer(t)
-	_, err := UpdateTransfer(context.Background(), &transfer, &update_transfer, TEST_DB)
+	updated_transfer, err := UpdateTransfer(context.Background(), &transfer, &update_transfer, TEST_DB)
 
 	require.NoError(t, err)
-	require.NotEmpty(t, transfer)
+	require.NotEmpty(t, updated_transfer)
 
-	require.Equal(t, transfer.Amount, update_transfer.Amount)
+	require.Equal(t, updated_transfer.Amount, update_transfer.Amount)
 
-	require.NotZero(t, transfer.UpdatedAt)
+	require.NotZero(t, updated_transfer.UpdatedAt)
 }
 
 func TestDeleteTransfer(t *testing.T) {
@@ -74,12 +73,12 @@ func TestDeleteTransfer(t *testing.T) {
 }
 
 func TestListAllTransfers(t *testing.T) {
-	transfers := []models.Transfer{}
+	
 	for i := 0; i < 10; i++ {
 		createTransfer(t)
 	}
 
-	_, err := ListAllTransfers(context.Background(), &transfers, 5, 5, TEST_DB)
+	transfers, err := ListAllTransfers(context.Background(), 5, 5, TEST_DB)
 
 	require.NoError(t, err)
 	require.Equal(t, len(transfers), 5)

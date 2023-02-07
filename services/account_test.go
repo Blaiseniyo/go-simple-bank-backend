@@ -28,7 +28,7 @@ func CreateAccounts(t *testing.T) models.Account {
 	require.NotZero(t, account.Currency)
 	require.NotZero(t, account.CreatedAt)
 
-	return *account
+	return account
 
 }
 
@@ -37,9 +37,9 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func TestGetAccount(t *testing.T) {
-	account := models.Account{}
+	
 	new_account := CreateAccounts(t)
-	_, err := GetAccountById(context.Background(), &account, new_account.Id, TEST_DB)
+	account, err := GetAccountById(context.Background(), new_account.Id, TEST_DB)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, account)
@@ -55,14 +55,14 @@ func TestGetAccount(t *testing.T) {
 func TestUpdateAccount(t *testing.T) {
 	update_account := models.Account{Owner: "test_User", Balance: 12323, Currency: "FRW"}
 	account := CreateAccounts(t)
-	_, err := UpdateAccount(context.Background(), &account, &update_account, TEST_DB)
+	updated_account, err := UpdateAccount(context.Background(), &account, &update_account, TEST_DB)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, account)
 
-	require.Equal(t, account.Owner, update_account.Owner)
-	require.Equal(t, account.Balance, update_account.Balance)
-	require.Equal(t, account.Currency, update_account.Currency)
+	require.Equal(t, account.Owner, updated_account.Owner)
+	require.Equal(t, account.Balance, updated_account.Balance)
+	require.Equal(t, account.Currency, updated_account.Currency)
 
 	require.NotZero(t, account.UpdatedAt)
 }
@@ -78,12 +78,12 @@ func TestDeletAccount(t *testing.T) {
 }
 
 func TestListAllAccount(t *testing.T) {
-	accounts := []models.Account{}
+	
 	for i := 0; i < 10; i++ {
 		CreateAccounts(t)
 	}
 
-	_, err := ListAllAccounts(context.Background(), &accounts, 5, 5, TEST_DB)
+	accounts, err := ListAllAccounts(context.Background(), 5, 5, TEST_DB)
 
 	require.NoError(t, err)
 	require.Equal(t, len(accounts), 5)
