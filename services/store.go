@@ -21,12 +21,12 @@ type TransferResult struct {
 	ToEntry     models.Entry    `json:"to_entry"`
 }
 
-func TransferTransaction(ctx context.Context, db *gorm.DB, transfer_data *TransferParams) {
+func TransferTransaction(ctx context.Context, db *gorm.DB, transfer_data TransferParams) (TransferResult, error) {
 	var result TransferResult
+	var err error
 
 	db.Transaction(func(tx *gorm.DB) error {
 
-		var err error
 		transfer := models.Transfer{From_account_id: transfer_data.From_account_id, To_account_id: transfer_data.To_account_id, Amount: transfer_data.Amount}
 		result.Transfer, err = CreateTransfer(ctx, &transfer, tx)
 
@@ -56,4 +56,6 @@ func TransferTransaction(ctx context.Context, db *gorm.DB, transfer_data *Transf
 		// return nil will commit the whole transaction
 		return nil
 	})
+
+	return result, err
 }
