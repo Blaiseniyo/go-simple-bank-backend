@@ -11,18 +11,18 @@ import (
 func createEntry(t *testing.T) models.Entry {
 
 	account := CreateAccounts(t)
-	Entry_data := models.Entry{Account_id: account.Id, Amount: 10}
-	Entry, err := CreateEntry(context.Background(), &Entry_data, TEST_DB)
+	entry_data := models.Entry{Account_id: account.Id, Amount: 10}
+	entry, err := CreateEntry(context.Background(), &entry_data, TEST_DB)
 
 	require.NoError(t, err)
-	require.NotEmpty(t, Entry)
+	require.NotEmpty(t, entry)
 
-	require.Equal(t, Entry_data.Account_id, Entry.Account_id)
-	require.Equal(t, Entry.Amount, Entry.Amount)
+	require.Equal(t, entry_data.Account_id, entry.Account_id)
+	require.Equal(t, entry.Amount, entry.Amount)
 
-	require.NotZero(t, Entry.CreatedAt)
+	require.NotZero(t, entry.CreatedAt)
 
-	return *Entry
+	return entry
 }
 
 func TestCreateEntry(t *testing.T) {
@@ -31,40 +31,39 @@ func TestCreateEntry(t *testing.T) {
 
 func TestGetEntry(t *testing.T) {
 
-	Entry := models.Entry{}
-	new_Entry := createEntry(t)
-	_, err := GetEntryById(context.Background(), &Entry, new_Entry.Id, TEST_DB)
+	new_entry := createEntry(t)
+	entry, err := GetEntryById(context.Background(), new_entry.Id, TEST_DB)
 
 	require.NoError(t, err)
-	require.NotEmpty(t, Entry)
+	require.NotEmpty(t, entry)
 
-	require.Equal(t, new_Entry.Account_id, Entry.Account_id)
-	require.Equal(t, new_Entry.Amount, Entry.Amount)
-	require.Equal(t, new_Entry.Id, Entry.Id)
+	require.Equal(t, new_entry.Account_id, entry.Account_id)
+	require.Equal(t, new_entry.Amount, entry.Amount)
+	require.Equal(t, new_entry.Id, entry.Id)
 
-	require.NotZero(t, Entry.CreatedAt)
+	require.NotZero(t, entry.CreatedAt)
 
 }
 
 func TestUpdateEntry(t *testing.T) {
 	account := CreateAccounts(t)
 	update_Entry := models.Entry{Amount: 2, Account_id: account.Id}
-	Entry := createEntry(t)
-	_, err := UpdateEntry(context.Background(), &Entry, &update_Entry, TEST_DB)
+	entry := createEntry(t)
+	updated_entry, err := UpdateEntry(context.Background(), &entry, &update_Entry, TEST_DB)
 
 	require.NoError(t, err)
-	require.NotEmpty(t, Entry)
+	require.NotEmpty(t, updated_entry)
 
-	require.Equal(t, Entry.Account_id, update_Entry.Account_id)
-	require.Equal(t, Entry.Amount, update_Entry.Amount)
+	require.Equal(t, updated_entry.Account_id, update_Entry.Account_id)
+	require.Equal(t, updated_entry.Amount, update_Entry.Amount)
 
-	require.NotZero(t, Entry.UpdatedAt)
+	require.NotZero(t, updated_entry.UpdatedAt)
 }
 
 func TestDeleteEntry(t *testing.T) {
 
-	Entry := createEntry(t)
-	deleted_row, err := DeleteEntry(context.Background(), Entry.Id, TEST_DB)
+	entry := createEntry(t)
+	deleted_row, err := DeleteEntry(context.Background(), entry.Id, TEST_DB)
 
 	require.NoError(t, err)
 
@@ -72,17 +71,17 @@ func TestDeleteEntry(t *testing.T) {
 }
 
 func TestListAllEntrys(t *testing.T) {
-	Entrys := []models.Entry{}
+
 	for i := 0; i < 10; i++ {
 		createEntry(t)
 	}
 
-	_, err := ListAllEntries(context.Background(), &Entrys, 5, 5, TEST_DB)
+	entries, err := ListAllEntries(context.Background(), 5, 5, TEST_DB)
 
 	require.NoError(t, err)
-	require.Equal(t, len(Entrys), 5)
+	require.Equal(t, len(entries), 5)
 
-	for _, i := range Entrys {
+	for _, i := range entries {
 		require.NotEmpty(t, i)
 	}
 }
