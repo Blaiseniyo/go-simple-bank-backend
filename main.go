@@ -9,17 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
-// import (
-//
-//	"net/http"
-//
-// )
 var DB *gorm.DB
-
 
 func main() {
 
-	config,err := util.LoadConfig(".")
+	config, err := util.LoadConfig(".")
 	DB = db.Connect(&config)
 	server := api.NewServer(DB)
 	err = server.Start(config.ServeAddress)

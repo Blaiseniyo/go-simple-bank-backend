@@ -73,7 +73,7 @@ func TestDeleteTransfer(t *testing.T) {
 }
 
 func TestListAllTransfers(t *testing.T) {
-	
+
 	for i := 0; i < 10; i++ {
 		createTransfer(t)
 	}

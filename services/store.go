@@ -40,7 +40,7 @@ func TransferTransaction(ctx context.Context, db *gorm.DB, transfer_data Transfe
 			// return any error will rollback
 			return err
 		}
-		
+
 		from_entry := models.Entry{Account_id: transfer_data.From_account_id, Amount: -transfer_data.Amount}
 		result.FromEntry, err = CreateEntry(ctx, &from_entry, tx)
 

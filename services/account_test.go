@@ -37,7 +37,7 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func TestGetAccount(t *testing.T) {
-	
+
 	new_account := CreateAccounts(t)
 	account, err := GetAccountById(context.Background(), new_account.Id, TEST_DB)
 
@@ -78,7 +78,7 @@ func TestDeletAccount(t *testing.T) {
 }
 
 func TestListAllAccount(t *testing.T) {
-	
+
 	for i := 0; i < 10; i++ {
 		CreateAccounts(t)
 	}

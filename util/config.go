@@ -8,7 +8,7 @@ import (
 
 type Config struct {
 	DBUser       string `mapstructure:"DB_USER"`
-	DBPassword       string `mapstructure:"DB_PASSWORD"`
+	DBPassword   string `mapstructure:"DB_PASSWORD"`
 	DBName       string `mapstructure:"DB_NAME"`
 	DBHost       string `mapstructure:"DB_HOST"`
 	DBPort       string `mapstructure:"DB_PORT"`

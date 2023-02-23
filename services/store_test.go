@@ -19,9 +19,9 @@ func TestTransferTx(t *testing.T) {
 	errs := make(chan error)
 	results := make(chan TransferResult)
 	for i := 0; i < n; i++ {
-		txName := fmt.Sprintf("tx %d",i+1)
+		txName := fmt.Sprintf("tx %d", i+1)
 		go func() {
-			ctx := context.WithValue(context.Background(),txKey,txName)
+			ctx := context.WithValue(context.Background(), txKey, txName)
 			result, err := TransferTransaction(ctx, TEST_DB, TransferParams{
 				From_account_id: account1.Id,
 				To_account_id:   account2.Id,
@@ -87,7 +87,7 @@ func TestTransferTx(t *testing.T) {
 
 		diff1 := account1.Balance - fromAccount.Balance
 		diff2 := toAccount.Balance - account2.Balance
-		
+
 		require.Equal(t, diff1, diff2)
 		require.True(t, diff1 > 0)
 		require.True(t, diff1%amount == 0)
@@ -102,7 +102,7 @@ func TestTransferTx(t *testing.T) {
 
 	updatedToAccount, err := GetAccountById(context.Background(), account2.Id, TEST_DB)
 	require.NoError(t, err)
-	fmt.Println(">> After:",updatedFromAccount.Balance, updatedToAccount.Balance)
+	fmt.Println(">> After:", updatedFromAccount.Balance, updatedToAccount.Balance)
 	require.Equal(t, account1.Balance-int64(n)*amount, updatedFromAccount.Balance)
 	require.Equal(t, account2.Balance+int64(n)*amount, updatedToAccount.Balance)
 }
