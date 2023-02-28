@@ -1,28 +1,22 @@
 package main
 
 import (
+	"log"
+
 	"github.com/Blaiseniyo/go-simple-bank-backend/api"
 	"github.com/Blaiseniyo/go-simple-bank-backend/db"
+	"github.com/Blaiseniyo/go-simple-bank-backend/util"
 	"gorm.io/gorm"
-	"log"
 )
 
-// import (
-//
-//	"net/http"
-//
-// )
 var DB *gorm.DB
-
-const (
-	address = "0.0.0.0:8080"
-)
 
 func main() {
 
-	DB = db.Connect()
+	config, err := util.LoadConfig(".")
+	DB = db.Connect(&config)
 	server := api.NewServer(DB)
-	err := server.Start(address)
+	err = server.Start(config.ServeAddress)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -19,7 +19,7 @@ func GetTransferById(ctx context.Context, TransferId int64, DB *gorm.DB) (models
 	return transfer, result.Error
 }
 
-func UpdateTransfer(ctx context.Context, transfer *models.Transfer, UpdatedTransferData *models.Transfer, DB *gorm.DB) ( models.Transfer, error) {
+func UpdateTransfer(ctx context.Context, transfer *models.Transfer, UpdatedTransferData *models.Transfer, DB *gorm.DB) (models.Transfer, error) {
 	var updated_account models.Transfer
 	result := DB.Model(&transfer).Updates(&UpdatedTransferData).Scan(&updated_account)
 	return updated_account, result.Error
@@ -30,7 +30,7 @@ func DeleteTransfer(ctx context.Context, TransferId int64, DB *gorm.DB) (int64, 
 	return result.RowsAffected, result.Error
 }
 
-func ListAllTransfers(ctx context.Context, limit int, offset int, DB *gorm.DB) ( []models.Transfer, error) {
+func ListAllTransfers(ctx context.Context, limit int, offset int, DB *gorm.DB) ([]models.Transfer, error) {
 	var transfers []models.Transfer
 	result := DB.Limit(limit).Offset(offset).Find(&transfers)
 	return transfers, result.Error

@@ -36,13 +36,13 @@ func (server *Server) createAccount(ctx *gin.Context) {
 	return
 }
 
-type getAccountRequest struct {
+type AccountIDParmsRequest struct {
 	ID int64 `uri:"id" binding:"required,min=1"`
 }
 
 func (server *Server) getAccount(ctx *gin.Context) {
 
-	var req getAccountRequest
+	var req AccountIDParmsRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
@@ -50,6 +50,30 @@ func (server *Server) getAccount(ctx *gin.Context) {
 	}
 
 	account, err := services.GetAccountById(ctx, req.ID, server.db)
+
+	if err != nil {
+		if err.Error() == "record not found" {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, account)
+	return
+}
+
+func (server *Server) deleteAccount(ctx *gin.Context) {
+
+	var req AccountIDParmsRequest
+
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	account, err := services.DeleteAccount(ctx, req.ID, server.db)
 
 	if err != nil {
 		if err.Error() == "record not found" {
@@ -87,5 +111,49 @@ func (server *Server) listAccounts(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, accounts)
+	return
+}
+
+type UpdateAccountRequest struct {
+	Owner    string `json:"owner"`
+	Currency string `json:"currency" binding:"oneof=USD EURO RFW"`
+	Balance  int64 `json:"balance"`
+}
+
+func (server *Server) updateAccount(ctx *gin.Context) {
+
+	var req AccountIDParmsRequest
+	var body UpdateAccountRequest
+
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	
+	if err:= ctx.ShouldBindJSON(&body); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	account, err := services.GetAccountById(ctx, req.ID, server.db)
+
+	if err != nil {
+		if err.Error() == "record not found" {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	updatedAccountinfo := models.Account{Owner: body.Owner,Currency: body.Currency,Balance: body.Balance}
+	updatedAccount, err := services.UpdateAccount(ctx, &account,&updatedAccountinfo, server.db)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, updatedAccount)
 	return
 }
