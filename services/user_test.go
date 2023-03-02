@@ -11,10 +11,14 @@ import (
 )
 
 func Createuser(t *testing.T) models.User {
+	password,err := util.HashPassword(util.RandomString(6))
+
+	require.NoError(t,err)
+
 	arg := models.User{
 		Username:    util.RandomOwner(),
 		FullName:    util.RandomOwner(),
-		HashedPassword:  "secretpassword",
+		HashedPassword:  password,
 		Email: util.RandomEmail(),
 	}
 
