@@ -11,7 +11,7 @@ import (
 
 func CreateAccounts(t *testing.T) models.Account {
 	arg := models.Account{
-		Owner:    util.RandomOwner(),
+		Owner:    Createuser(t).Username,
 		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
@@ -53,7 +53,7 @@ func TestGetAccount(t *testing.T) {
 }
 
 func TestUpdateAccount(t *testing.T) {
-	update_account := models.Account{Owner: "test_User", Balance: 12323, Currency: "FRW"}
+	update_account := models.Account{Owner: Createuser(t).Username, Balance: 12323, Currency: "FRW"}
 	account := CreateAccounts(t)
 	updated_account, err := UpdateAccount(context.Background(), &account, &update_account, TEST_DB)
 

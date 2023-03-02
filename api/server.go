@@ -16,10 +16,10 @@ func NewServer(db *gorm.DB) *Server {
 	server := &Server{db: db}
 	router := gin.Default()
 
-	if v,ok := binding.Validator.Engine().(*validator.Validate); ok{
-		v.RegisterValidation("currency",validCurrency)
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		v.RegisterValidation("currency", validCurrency)
 	}
-	
+
 	router.POST("/accounts", server.createAccount)
 	router.GET("/accounts/:id", server.getAccount)
 	router.GET("/accounts", server.listAccounts)

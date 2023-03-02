@@ -1,6 +1,8 @@
 package api
 
 import (
+	"strings"
+
 	"net/http"
 
 	"github.com/Blaiseniyo/go-simple-bank-backend/models"
@@ -28,6 +30,11 @@ func (server *Server) createAccount(ctx *gin.Context) {
 	}, server.db)
 
 	if err != nil {
+		if strings.Contains(err.Error(),"sqlstate 23505")||strings.Contains(err.Error(),"SQLSTATE 23503"){
+			ctx.JSON(http.StatusForbidden, errorResponse(err))
+			return
+		}
+		
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
@@ -117,7 +124,7 @@ func (server *Server) listAccounts(ctx *gin.Context) {
 type UpdateAccountRequest struct {
 	Owner    string `json:"owner"`
 	Currency string `json:"currency" binding:"oneof=USD EURO RFW"`
-	Balance  int64 `json:"balance"`
+	Balance  int64  `json:"balance"`
 }
 
 func (server *Server) updateAccount(ctx *gin.Context) {
@@ -129,8 +136,8 @@ func (server *Server) updateAccount(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	
-	if err:= ctx.ShouldBindJSON(&body); err != nil {
+
+	if err := ctx.ShouldBindJSON(&body); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
@@ -146,8 +153,8 @@ func (server *Server) updateAccount(ctx *gin.Context) {
 		return
 	}
 
-	updatedAccountinfo := models.Account{Owner: body.Owner,Currency: body.Currency,Balance: body.Balance}
-	updatedAccount, err := services.UpdateAccount(ctx, &account,&updatedAccountinfo, server.db)
+	updatedAccountinfo := models.Account{Owner: body.Owner, Currency: body.Currency, Balance: body.Balance}
+	updatedAccount, err := services.UpdateAccount(ctx, &account, &updatedAccountinfo, server.db)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
